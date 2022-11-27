@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef } from "react";
-import { Paper, Container, TextField, InputAdornment, Box } from "@mui/material";
+import { Paper, Container, TextField, InputAdornment, Box, Tooltip, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -129,12 +129,12 @@ const UserDetails = () => {
     return (
         <>
             <Paper sx={(openForm) ? parentStyle : mainStyle}>
-                <Box sx={headerStyle}>
+                <Container sx={headerStyle}>
                     <Box>
-                        <h2>User Details</h2>
+                        <h3>User Details</h3>
                     </Box>
 
-                    <Container sx={{ display: "flex" }}>
+                    <Container sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <TextField
                             variant="outlined"
                             name="searchText"
@@ -143,11 +143,6 @@ const UserDetails = () => {
                             value={searchText}
                             onChange={(e) => { handleSearch(e) }}
                             InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon sx={{ cursor: "pointer" }} onClick={getSearchData} />
-                                    </InputAdornment>
-                                ),
                                 endAdornment: (
                                     <InputAdornment position="start">
                                         {
@@ -158,10 +153,19 @@ const UserDetails = () => {
                                 )
                             }}
                         />
+                        <Tooltip title="Search">
+                            <IconButton onClick={getSearchData}>
+                                <SearchIcon sx={{ cursor: "pointer" }}  />
+                            </IconButton>
+                        </Tooltip>
                     </Container>
 
-                    <PersonAddIcon sx={{ cursor: "pointer" }} onClick={() => setOpenForm(true)} />
-                </Box>
+                    <Tooltip title="Add user">
+                        <IconButton onClick={() => setOpenForm(true)}>
+                            <PersonAddIcon sx={{ cursor: "pointer" }} />
+                        </IconButton>
+                    </Tooltip>
+                </Container>
 
                 <DataTable
                     rows={records}

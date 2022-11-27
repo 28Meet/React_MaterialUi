@@ -157,7 +157,7 @@ const headCells = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'name',
+    label: 'Name',
   },
   {
     id: 'address',
@@ -206,13 +206,14 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow >
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={"center"}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontSize : 16}}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -351,6 +352,7 @@ export default function DataTable({ rows, searchData, isSearch, noData, edit, de
                               scope="row"
                               padding="none"
                               align="center"
+                              sx={{ fontWeight : "bold"}}
                             >
                               {row.id}
                             </TableCell>
