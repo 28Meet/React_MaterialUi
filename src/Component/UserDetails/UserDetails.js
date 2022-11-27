@@ -84,7 +84,7 @@ const UserDetails = () => {
     const headerStyle = {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "space-between"
     }
 
     const closeForm = () => {
@@ -101,15 +101,28 @@ const UserDetails = () => {
         }
     }
 
+    const mainStyle = {
+        zIndex: 1,
+        margin: 3,
+        padding: 1
+    }
+
+    const parentStyle = {
+        filter : "blur(1px)",
+        pointerEvents : "none"
+    }
+
     useEffect(() => {
         getUserData();
     }, [openForm])
 
     return (
         <>
-            <Paper>
-                <Container sx={headerStyle}>
-                    <h2>User Details</h2>
+            <Paper sx={(openForm) ? parentStyle : mainStyle}>
+                <Box sx={headerStyle}>
+                    <Box>
+                        <h2>User Details</h2>
+                    </Box>
 
                     <Container sx={{ display: "flex" }}>
                         <TextField
@@ -138,7 +151,7 @@ const UserDetails = () => {
                     </Container>
 
                     <PersonAddIcon sx={{ cursor: "pointer" }} onClick={() => setOpenForm(true)} />
-                </Container>
+                </Box>
 
                 <DataTable
                     rows={records}

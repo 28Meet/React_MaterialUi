@@ -16,14 +16,14 @@ function App() {
   });
 
   const changeTheme = () => {
-      (theme == 'light') ? setTheme('dark') : setTheme('light');
+    (theme == 'light') ? setTheme('dark') : setTheme('light');
   }
 
   return (
     <>
-      <ToggleSwitch toggleTheme={changeTheme} />
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
+        <ToggleSwitch toggleTheme={changeTheme} />
         <div className="App">
           <UserDetails />
         </div>
