@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 
 const Input = (props) => {
-    let {variant, size, margin, label, name, type, width, value, onchange, errorvalue, onleave, errMsg, row, multiline} = props;
+    let {variant, size, margin, label, name, type, width, value, onchange, errorValue, onleave, errMsg, row, multiline} = props;
     
     return(
         <>
@@ -17,9 +17,9 @@ const Input = (props) => {
                 value={value}
                 sx={{ width: width }}
                 onChange={onchange}
-                error={errorvalue}
+                error={errorValue}
                 onBlur={onleave}
-                // helperText={errorvalue && errMsg}
+                helperText={errorValue && errMsg}
             >
 
             </TextField>
