@@ -4,8 +4,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataTable from "../Table/DataTable";
+import Form from "../Form/Form";
 
 const UserDetails = () => {
+    const [openForm, setOpenForm] = useState(false);
+    const [updateId, setUpdateId] = useState(0);
+    const [deleteId, setDeleteId] = useState(0);
+    const [userName, setUserName] = useState("");
     const [records, setRecords] = useState([]);
     const [noData, setNoData] = useState(false);
     const [searchRecord, setSearchRecord] = useState([]);
@@ -16,6 +21,22 @@ const UserDetails = () => {
     const handleSearch = (e) => {
         setSearchText(e.target.value);
         setIsSearch(true);
+    }
+
+    const setUpdate = () => {
+        setUpdateId(0);
+    }
+
+    const handleUpdate = (id) => {
+        setUpdateId(id);
+        setOpenForm(true);
+        // console.log("edit");
+        // console.log(id);
+    }
+
+    const handleDelete = (id, name) => {
+        setDeleteId(id);
+        setUserName(name);
     }
 
     const clearSearch = () => {
@@ -50,6 +71,10 @@ const UserDetails = () => {
         justifyContent: "center"
     }
 
+    const closeForm = () => {
+        setOpenForm(false);
+    }
+
     const getUserData = () => {
         let record = new Array();
         record = JSON.parse(localStorage.getItem('RECORD'));
@@ -62,7 +87,7 @@ const UserDetails = () => {
 
     useEffect(() => {
         getUserData();
-    }, [])
+    }, [openForm])
 
     return (
         <>
@@ -96,7 +121,7 @@ const UserDetails = () => {
                         />
                     </Container>
 
-                    <PersonAddIcon sx={{ cursor: "pointer" }} />
+                    <PersonAddIcon sx={{ cursor: "pointer" }} onClick={() => setOpenForm(true)} />
                 </Container>
 
                 <DataTable
@@ -104,8 +129,14 @@ const UserDetails = () => {
                     searchData={searchRecord}
                     isSearch={isSearchAvailable}
                     noData={noData}
+                    edit={handleUpdate}
+                    deleteId={handleDelete}
                 />
             </Paper>
+
+            {
+                (openForm && <Form close={closeForm} updateId={updateId} resetId={setUpdate} />)
+            }
         </>
     )
 }
