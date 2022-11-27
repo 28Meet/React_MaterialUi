@@ -4,11 +4,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataTable from "../Table/DataTable";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import Form from "../Form/Form";
 
 const UserDetails = () => {
     const [openForm, setOpenForm] = useState(false);
     const [updateId, setUpdateId] = useState(0);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(0);
     const [userName, setUserName] = useState("");
     const [records, setRecords] = useState([]);
@@ -30,13 +32,27 @@ const UserDetails = () => {
     const handleUpdate = (id) => {
         setUpdateId(id);
         setOpenForm(true);
-        // console.log("edit");
-        // console.log(id);
     }
 
     const handleDelete = (id, name) => {
         setDeleteId(id);
         setUserName(name);
+        setDeleteModalOpen(true);
+    }
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false);
+    }
+
+    const deleteData = () => {
+        let record = new Array();
+        record = JSON.parse(localStorage.getItem('RECORD'));
+        var array = record.filter(user => {
+            return user.id != deleteId;
+        });
+        localStorage.setItem('RECORD', JSON.stringify(array));
+        closeDeleteModal();
+        getUserData();
     }
 
     const clearSearch = () => {
@@ -136,6 +152,10 @@ const UserDetails = () => {
 
             {
                 (openForm && <Form close={closeForm} updateId={updateId} resetId={setUpdate} />)
+            }
+
+            {
+                (deleteModalOpen && <DeleteModal open={deleteModalOpen} name={userName} deleteData={deleteData} close={closeDeleteModal} />)
             }
         </>
     )
