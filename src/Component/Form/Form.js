@@ -11,12 +11,12 @@ import DropDown from "../common/dropdown/DropDown";
 const Form = ({ close, updateId, resetId }) => {
     const [isUpdate, setIsUpdate] = useState(false);
     const [data, setData] = useState({
-        name: "abc",
-        address: "abcdefg",
-        mail: "abc@gmail.com",
-        mobile: "1234567890",
-        gender: "male",
-        city: "Ahmedabad",
+        name: "",
+        address: "",
+        mail: "",
+        mobile: "",
+        gender: "",
+        city: "",
         id: 0
     });
 
@@ -210,6 +210,7 @@ const Form = ({ close, updateId, resetId }) => {
                 </FormControl>
 
                 <FormControl>
+                    <InputLabel>City*</InputLabel>
                     <DropDown
                         label="City*"
                         size="small"
