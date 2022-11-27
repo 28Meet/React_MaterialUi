@@ -115,6 +115,7 @@ const Form = ({ close, updateId, resetId }) => {
                 userid++;
                 localStorage.setItem('ID', parseInt(userid));
                 localStorage.setItem('RECORD', JSON.stringify(record));
+                close();
             }
 
         }

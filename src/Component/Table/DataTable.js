@@ -308,9 +308,9 @@ export default function DataTable({ rows, searchData, isSearch, noData, edit, de
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
 
         {
           (noData) ? (<h2>No Data Found.</h2>) : (
