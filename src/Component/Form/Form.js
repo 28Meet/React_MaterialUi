@@ -9,12 +9,12 @@ import DropDown from "../common/dropdown/DropDown";
 
 const Form = () => {
     const [data, setData] = useState({
-        name: "",
-        address: "",
-        mail: "",
-        mobile: "",
-        gender: "",
-        city: "",
+        name: "abc",
+        address: "abcdefg",
+        mail: "abc@gmail.com",
+        mobile: "1234567890",
+        gender: "male",
+        city: "Ahmedabad",
         id: 0
     });
 
@@ -63,11 +63,11 @@ const Form = () => {
 
             if(record.length == 0){
                 userid = 1;
-                id = userid;
+                data.id = userid;
                 record = [];
                 record.push(data);
             } else {
-                id = userid;
+                data.id = userid;
                 record.push(data);
             }
             userid++;
