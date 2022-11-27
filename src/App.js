@@ -1,15 +1,34 @@
 import './App.css';
-import Form from "../src/Component/Form/Form";
+import { useState } from "react";
 import UserDetails from './Component/UserDetails/UserDetails';
-import Table from './Component/Table/DataTable';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import ToggleSwitch from './Component/ToggleSwitch/ToggleSwitch';
+
 
 function App() {
+  const [theme, setTheme] = useState('light');
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: theme,
+    },
+  });
+
+  const changeTheme = () => {
+      (theme == 'light') ? setTheme('dark') : setTheme('light');
+  }
+
   return (
-    <div className="App">
-        {/* <Form /> */}
-        <UserDetails />
-        {/* <Table /> */}
-    </div>
+    <>
+      <ToggleSwitch toggleTheme={changeTheme} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <div className="App">
+          <UserDetails />
+        </div>
+      </ThemeProvider>
+    </>
   );
 }
 
