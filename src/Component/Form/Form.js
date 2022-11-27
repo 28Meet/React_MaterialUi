@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Paper, Box, IconButton, FormControlLabel, InputLabel, FormLabel, FormControl, FormHelperText, Checkbox, RadioGroup } from "@mui/material";
+import { Paper, Box, IconButton, FormControlLabel, InputLabel, FormLabel, FormControl, FormHelperText, Checkbox, RadioGroup, Tooltip } from "@mui/material";
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import CloseIcon from '@mui/icons-material/Close';
 import { CITY } from "../Constants/Constant";
 import Input from "../common/Input/Input";
 import BtnField from "../common/button/BtnField";
 import RadioButton from "../common/radio/RadioButton";
 import DropDown from "../common/dropdown/DropDown";
 
-const Form = () => {
+const Form = ({ close, updateId, resetId }) => {
+    const [isUpdate, setIsUpdate] = useState(false);
     const [data, setData] = useState({
         name: "abc",
         address: "abcdefg",
@@ -34,48 +36,6 @@ const Form = () => {
         setData({ ...data, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = () => {
-        if (name == "" && address == "" && mail == "" && mobile == "" && gender == "" && city == "") {
-            setError({
-                nameError: true,
-                addressError: true,
-                mailError: true,
-                mobileError: true,
-                genderError: true,
-                cityError: true
-            })
-        } else if(name == ""){
-            setError({...error, nameError : true});
-        } else if(address == ""){
-            setError({...error, addressError : true});
-        } else if(mail == ""){
-            setError({...error, mailError : true});
-        } else if(mobile == ""){
-            setError({...error, mobileError : true});
-        } else if(gender == ""){
-            setError({...error, genderError : true});
-        } else if(city == ""){
-            setError({...error, cityError : true});
-        } else {
-            let record = new Array();
-            record = JSON.parse(localStorage.getItem('RECORD'));
-            let userid = parseInt(localStorage.getItem("ID"));
-
-            if(record.length == 0){
-                userid = 1;
-                data.id = userid;
-                record = [];
-                record.push(data);
-            } else {
-                data.id = userid;
-                record.push(data);
-            }
-            userid++;
-            localStorage.setItem('ID', parseInt(userid));
-            localStorage.setItem('RECORD', JSON.stringify(record));
-        }
-    }
-
     const handleReset = () => {
         setError({
             nameError: false,
@@ -96,6 +56,70 @@ const Form = () => {
         });
     }
 
+    const handleSubmit = () => {
+        if (name == "" && address == "" && mail == "" && mobile == "" && gender == "" && city == "") {
+            setError({
+                nameError: true,
+                addressError: true,
+                mailError: true,
+                mobileError: true,
+                genderError: true,
+                cityError: true
+            })
+        } else if (name == "") {
+            setError({ ...error, nameError: true });
+        } else if (address == "") {
+            setError({ ...error, addressError: true });
+        } else if (mail == "") {
+            setError({ ...error, mailError: true });
+        } else if (mobile == "") {
+            setError({ ...error, mobileError: true });
+        } else if (gender == "") {
+            setError({ ...error, genderError: true });
+        } else if (city == "") {
+            setError({ ...error, cityError: true });
+        } else {
+            let record = new Array();
+            record = JSON.parse(localStorage.getItem('RECORD'));
+            let userid = parseInt(localStorage.getItem("ID"));
+
+            if (isUpdate) {
+                for(let i = 0; i < record.length; i++){
+                    for(let key in record[i]){
+                        if(record[i].id === updateId){
+                            record[i].name = data.name;
+                            record[i].address = data.address;
+                            record[i].mail = data.mail;
+                            record[i].mobile = data.mobile;
+                            record[i].gender = data.gender;
+                            record[i].city = data.city;
+                        }
+                    }
+                }
+
+                localStorage.setItem("RECORD", JSON.stringify(record));
+                setIsUpdate(false);
+                resetId();
+                handleReset();
+                close();
+            } else {
+                if (record.length == 0) {
+                    userid = 1;
+                    data.id = userid;
+                    record = [];
+                    record.push(data);
+                } else {
+                    data.id = userid;
+                    record.push(data);
+                }
+                userid++;
+                localStorage.setItem('ID', parseInt(userid));
+                localStorage.setItem('RECORD', JSON.stringify(record));
+            }
+
+        }
+    }
+
     const parentStyle = {
         boxShadow: "0px 2px 2px grey",
         borderRadius: 3,
@@ -105,13 +129,49 @@ const Form = () => {
         justifyContent: "center",
         alignItems: "center",
         margin: "auto",
-        padding: 2
+        padding: 1
     }
+
+    const closeBtnStyle = {
+        cursor: "pointer",
+        position: 'relative',
+        top: -60,
+        right: -190
+    }
+
+    const getUserData = () => {
+        if (updateId != 0) {
+            let record = new Array();
+            record = JSON.parse(localStorage.getItem('RECORD'));
+            let user = record.filter(userDetail => { return userDetail.id == updateId });
+            setIsUpdate(true);
+            user = user[0];
+            setData(user);
+        }
+    }
+
+    useEffect(() => {
+        getUserData();
+    }, [updateId])
+
     return (
         <>
             {/* <Paper> */}
             <FormControl sx={parentStyle}>
-                <h2>Registration</h2>
+
+                <Box>
+                    {
+                        (isUpdate) ? <h2>Edit</h2> : <h2>Registration</h2>
+                    }
+                    <Box sx={closeBtnStyle}>
+                        <Tooltip title="Close">
+                            <IconButton onClick={close}>
+                                <CloseIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </Box>
+
                 <FormControl>
                     <Input variant="outlined" size="small" margin="none" label="Name*" type="text" name="name" value={name} width={350} errorValue={nameError} onchange={(e) => { handleChange(e); setError({ ...data, nameError: false }) }} errMsg="Please enter your name" row={1} multiline={false} />
                 </FormControl>
@@ -177,9 +237,9 @@ const Form = () => {
 
                 <FormControl>
                     <Box>
-                        <BtnField text="Submit" variant="contained" color="primary" size="medium" type="submit" handleClick={handleSubmit} />
+                        <BtnField text={(isUpdate) ? "Edit" : "Sign Up"} variant="contained" color="primary" size="medium" type="submit" handleClick={handleSubmit} />
 
-                        <BtnField text="Reset" variant="contained" color="secondary" size="medium" type="reset" handleClick={handleReset}/>
+                        <BtnField text="Reset" variant="contained" color="secondary" size="medium" type="reset" handleClick={handleReset} />
                     </Box>
 
                 </FormControl>

@@ -264,7 +264,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function DataTable({ rows, searchData, isSearch, noData }) {
+export default function DataTable({ rows, searchData, isSearch, noData, edit, deleteId }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = React.useState([]);
@@ -362,13 +362,13 @@ export default function DataTable({ rows, searchData, isSearch, noData }) {
                             <TableCell align="left">{row.city}</TableCell>
                             <TableCell>
                               <Tooltip title="Edit">
-                                <IconButton>
-                                  <EditIcon color="primary" />
+                                <IconButton onClick={() => edit(row.id)}>
+                                  <EditIcon color="primary" />  
                                 </IconButton>
                               </Tooltip>
 
                               <Tooltip title="Delete">
-                                <IconButton>
+                                <IconButton onClick={() => deleteId(row.id, row.name)}>
                                   <DeleteIcon color="error" />
                                 </IconButton>
                               </Tooltip>
