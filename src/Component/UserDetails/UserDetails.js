@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { Paper, Container, TextField, InputAdornment, Box } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,10 +6,19 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataTable from "../Table/DataTable";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import Form from "../Form/Form";
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 
 const UserDetails = () => {
+    const Alert = forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
     const [openForm, setOpenForm] = useState(false);
     const [updateId, setUpdateId] = useState(0);
+    const [modalOpen, setModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(0);
     const [userName, setUserName] = useState("");
@@ -52,6 +61,7 @@ const UserDetails = () => {
         });
         localStorage.setItem('RECORD', JSON.stringify(array));
         closeDeleteModal();
+        setModalOpen(true);
         getUserData();
     }
 
@@ -84,7 +94,7 @@ const UserDetails = () => {
     const headerStyle = {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "space-between"
     }
 
     const closeForm = () => {
@@ -101,15 +111,28 @@ const UserDetails = () => {
         }
     }
 
+    const mainStyle = {
+        zIndex: 1,
+        margin: 3,
+        padding: 1
+    }
+
+    const parentStyle = {
+        filter: "blur(1px)",
+        pointerEvents: "none"
+    }
+
     useEffect(() => {
         getUserData();
-    }, [openForm])
+    }, [openForm]);
 
     return (
         <>
-            <Paper>
-                <Container sx={headerStyle}>
-                    <h2>User Details</h2>
+            <Paper sx={(openForm) ? parentStyle : mainStyle}>
+                <Box sx={headerStyle}>
+                    <Box>
+                        <h2>User Details</h2>
+                    </Box>
 
                     <Container sx={{ display: "flex" }}>
                         <TextField
@@ -138,7 +161,7 @@ const UserDetails = () => {
                     </Container>
 
                     <PersonAddIcon sx={{ cursor: "pointer" }} onClick={() => setOpenForm(true)} />
-                </Container>
+                </Box>
 
                 <DataTable
                     rows={records}
@@ -148,7 +171,15 @@ const UserDetails = () => {
                     edit={handleUpdate}
                     deleteId={handleDelete}
                 />
+
+                <Snackbar open={modalOpen} autoHideDuration={3000} onClose={() => setModalOpen(false)}>
+                    <Alert severity="info" sx={{ width: '100%' }}>
+                        Data Updated Successfully
+                    </Alert>
+                </Snackbar>
             </Paper>
+
+
 
             {
                 (openForm && <Form close={closeForm} updateId={updateId} resetId={setUpdate} />)

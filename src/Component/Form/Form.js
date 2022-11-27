@@ -115,6 +115,7 @@ const Form = ({ close, updateId, resetId }) => {
                 userid++;
                 localStorage.setItem('ID', parseInt(userid));
                 localStorage.setItem('RECORD', JSON.stringify(record));
+                close();
             }
 
         }
@@ -130,6 +131,14 @@ const Form = ({ close, updateId, resetId }) => {
         alignItems: "center",
         margin: "auto",
         padding: 1
+    }
+
+    const mainContainer = {
+        zIndex : 2,
+        width : 500,
+        position : "absolute",
+        top : 100,
+        left : 400
     }
 
     const closeBtnStyle = {
@@ -156,9 +165,8 @@ const Form = ({ close, updateId, resetId }) => {
 
     return (
         <>
-            {/* <Paper> */}
+            <Paper sx={mainContainer}>
             <FormControl sx={parentStyle}>
-
                 <Box>
                     {
                         (isUpdate) ? <h2>Edit</h2> : <h2>Registration</h2>
@@ -244,7 +252,7 @@ const Form = ({ close, updateId, resetId }) => {
 
                 </FormControl>
             </FormControl>
-            {/* </Paper> */}
+            </Paper>
         </>
     )
 }
